@@ -1,15 +1,14 @@
 import React from 'react'
-import { Flex, Box, Spacer } from '@chakra-ui/react'
-
+import { Flex, Box, Spacer, Image } from '@chakra-ui/react'
 
 export default function Menu({children}) {
   return (
-    <Flex>
+    <Flex bg="#000E44" pr={7} pl={7}  align="center" justify="space-between">
         <Box>
-            FESTIVAL FUEL
+            <Image w={200} src="/festivalfuel-logo.png"/>
         </Box>
 
-        <Flex>Nav Links</Flex>
+        <Flex color="whitesmoke">Nav Links</Flex>
       
     </Flex>
   )
