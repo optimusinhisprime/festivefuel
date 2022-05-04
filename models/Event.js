@@ -7,6 +7,9 @@ const eventStallSchema = new Schema({
   category: String,
 });
 
+module.exports =
+  mongoose.models.EventStall || mongoose.model("EventStall", eventStallSchema);
+
 const EventSchema = new Schema(
   {
     name: String,
