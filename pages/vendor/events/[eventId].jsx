@@ -1,7 +1,7 @@
 import React from "react";
-
+import SingleEvent from "../../../components/Shared/SingleEvent"
 const SingleEventPage = () => {
-  return <div>View a single event with more description here</div>;
+  return <SingleEvent />;
 };
 
 export default SingleEventPage;
