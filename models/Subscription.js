@@ -1,9 +1,9 @@
-import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const SubscriptionSchema = new Schema(
   {
-    vendorId: String,
+    vendorId: { type: mongoose.Types.ObjectId, ref: 'User' },
     date: Date,
     amount: String,
     type: String,
@@ -13,4 +13,4 @@ const SubscriptionSchema = new Schema(
 
 module.exports =
   mongoose.models.Subscription ||
-  mongoose.model("Subscription", SubscriptionSchema);
+  mongoose.model('Subscription', SubscriptionSchema);

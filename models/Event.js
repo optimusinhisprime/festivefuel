@@ -1,5 +1,5 @@
-import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const eventStallSchema = new Schema({
   name: String,
@@ -8,7 +8,7 @@ const eventStallSchema = new Schema({
 });
 
 module.exports =
-  mongoose.models.EventStall || mongoose.model("EventStall", eventStallSchema);
+  mongoose.models.EventStall || mongoose.model('EventStall', eventStallSchema);
 
 const EventSchema = new Schema(
   {
@@ -18,10 +18,13 @@ const EventSchema = new Schema(
     description: String,
     images: [String],
     category: [String],
-    organizerId: String,
+    organizerId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
     eventStalls: [eventStallSchema],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.models.Event || mongoose.model("Event", EventSchema);
+module.exports = mongoose.models.Event || mongoose.model('Event', EventSchema);

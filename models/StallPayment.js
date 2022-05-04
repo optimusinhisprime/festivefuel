@@ -1,10 +1,13 @@
-import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const StallPaymentSchema = new Schema(
   {
-    vendorId: String,
-    stallId: String,
+    vendorId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+    stallId: String, // not sure which this should be
     amount: String,
   },
   {
@@ -14,4 +17,4 @@ const StallPaymentSchema = new Schema(
 
 module.exports =
   mongoose.models.StallPayment ||
-  mongoose.model("StallPayment", StallPaymentSchema);
+  mongoose.model('StallPayment', StallPaymentSchema);
