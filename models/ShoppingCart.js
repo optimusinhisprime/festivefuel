@@ -1,13 +1,13 @@
-import * as mongoose from 'mongoose';
-import { Schema } from 'mongoose';
+import * as mongoose from "mongoose";
+import { Schema } from "mongoose";
 
 const ShoppingCartSchema = new Schema(
   {
     vendorId: {
       type: mongoose.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
-    shoppingCart: [String],
+    shoppingCart: [{ type: Schema.Types.ObjectId, ref: "EventStall" }],
   },
   {
     timestamps: true,
@@ -16,4 +16,4 @@ const ShoppingCartSchema = new Schema(
 
 module.exports =
   mongoose.models.ShoppingCart ||
-  mongoose.model('ShoppingCart', ShoppingCartSchema);
+  mongoose.model("ShoppingCart", ShoppingCartSchema);

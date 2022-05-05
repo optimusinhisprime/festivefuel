@@ -5,7 +5,7 @@ import { singleEventHandler } from "../../../../handlers/singleEventHandler";
 
 // Initializing the cors middleware
 const cors = Cors({
-  methods: ["GET", "POST", "PATCH"],
+  methods: ["GET", "PATCH"],
 });
 
 export const config = {
