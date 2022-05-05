@@ -12,17 +12,19 @@ module.exports =
 
 const EventSchema = new Schema(
   {
-    name: String,
-    date: Date,
-    attendance: Number,
-    description: String,
-    images: [String],
-    category: [String],
+    name: { type: String, required: true },
+    date: { type: String, required: true },
+    time: { type: String, required: true },
+    expectedAttendance: { type: Number, required: true },
+    description: { type: String, required: true },
+    images: { type: [String], default: undefined, required: true },
+    eventCategory: { type: [String], default: undefined, required: true },
     organizerId: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
+      required: true
     },
-    eventStalls: [eventStallSchema],
+    eventStalls: { type: [eventStallSchema], default: undefined },
   },
   { timestamps: true }
 );
