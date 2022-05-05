@@ -20,9 +20,9 @@ const EventSchema = new Schema(
     images: { type: [String], default: undefined, required: true },
     eventCategory: { type: [String], default: undefined, required: true },
     organizerId: {
-      type: mongoose.Types.ObjectId,
+      type: Schema.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     eventStalls: { type: [eventStallSchema], default: undefined },
   },
