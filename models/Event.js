@@ -16,7 +16,17 @@ const EventSchema = new Schema(
       ref: "User",
       required: true,
     },
-    eventStalls: { type: [], default: undefined },
+    eventStalls: {
+      type: [
+        {
+          stallId: { type: String, required: true, unique: true },
+          category: { type: String, required: true },
+          available: { type: Number, required: true },
+          price: { type: String, required: true },
+        },
+      ],
+      default: undefined,
+    },
   },
   { timestamps: true }
 );
