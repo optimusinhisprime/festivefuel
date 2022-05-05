@@ -12,14 +12,15 @@ module.exports =
 
 const EventSchema = new Schema(
   {
-    name: String,
-    date: Date,
-    attendance: Number,
-    description: String,
-    images: [String],
-    category: [String],
-    organizerId: String,
-    eventStalls: [eventStallSchema],
+    name: { type: String, required: true },
+    date: { type: String, required: true },
+    time: { type: String, required: true },
+    expectedAttendance: { type: Number, required: true },
+    description: { type: String, required: true },
+    images: { type: [String], default: undefined, required: true },
+    eventCategory: { type: [String], default: undefined, required: true },
+    organizerId: { type: String, required: true },
+    eventStalls: { type: [eventStallSchema], default: undefined },
   },
   { timestamps: true }
 );
