@@ -3,8 +3,14 @@ import { Schema } from "mongoose";
 
 const StallPaymentSchema = new Schema(
   {
-    vendorId: String,
-    stallId: String,
+    vendorId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
+    stallId: {
+      type: mongoose.Types.ObjectId,
+      ref: "EventStall",
+    }, // not sure which this should be
     amount: String,
   },
   {
