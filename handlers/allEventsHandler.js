@@ -24,6 +24,7 @@ const allEventsHandler = async (req, res) => {
       images,
       eventCategory,
       organizerId,
+      eventStalls,
     } = req.body;
 
     const event = new Event({
@@ -36,6 +37,7 @@ const allEventsHandler = async (req, res) => {
       images: images,
       eventCategory: eventCategory,
       organizerId: organizerId,
+      eventStalls: eventStalls,
     });
 
     event
