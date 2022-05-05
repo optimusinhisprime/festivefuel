@@ -10,16 +10,18 @@ import {
   TableContainer,
 } from '@chakra-ui/react';
 import EventImages from './EventImages';
+
 const SingleEvent = ({ event }) => {
   const { date, time, expectedAttendance, description, images } = event;
   return (
     <Flex mt={10} align='center' direction='column'>
       <Flex direction={['column', 'row']}>
-        <EventImages images={images} />
-        {/* <Image
-          w={400}
-          src='https://umfworldwide.com/wp-content/uploads/2017/11/resistance-abu-dhabi-lineup.jpg'
-        /> */}
+        <EventImages
+          images={[
+            ...images,
+            'https://umfworldwide.com/wp-content/uploads/2017/11/resistance-abu-dhabi-lineup.jpg',
+          ]} // added second image for component testing
+        />
         <Box>
           <p>Date: {date}</p>
           <p>Time: {time}</p>
