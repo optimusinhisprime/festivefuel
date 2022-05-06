@@ -1,7 +1,41 @@
-import React from "react";
-import SingleEvent from "../../../components/Shared/SingleEvent"
+import serverApi from '../../../utils/serverApi';
+import React from 'react';
+import SingleEvent from '../../../components/Shared/SingleEvent';
+import { Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+
 const SingleEventPage = () => {
-  return <SingleEvent />;
+  const [loading, setLoading] = React.useState(false);
+  const [event, setEvent] = React.useState();
+  const router = useRouter();
+
+  const getEvent = async (id) => {
+    setLoading(true);
+    const {
+      data: { event },
+    } = await serverApi.get(`/events/${id}`);
+    console.log(event);
+    setEvent(event);
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    if (!router.isReady) return;
+    const { eventId } = router.query;
+    console.log(eventId);
+
+    getEvent(eventId);
+  }, [router.isReady]);
+
+  if (loading) {
+    return (
+      <>
+        <Text>loading...</Text>
+      </>
+    );
+  }
+
+  return <SingleEvent event={event} />;
 };
 
 export default SingleEventPage;

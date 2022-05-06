@@ -1,16 +1,18 @@
-import "../styles/globals.css";
-import { ChakraProvider } from "@chakra-ui/react";
-import { SessionProvider } from "next-auth/react"
-import Layout from "../components/Layout/Layout"
+import '../styles/globals.css';
+import { ChakraProvider } from '@chakra-ui/react';
+import Layout from '../components/Layout/Layout';
+import { AppProvider } from '../context/appContext';
 function MyApp({ Component, pageProps }) {
   return (
-    <SessionProvider>
-    <ChakraProvider>
-      <Layout>
-      <Component {...pageProps} />
-      </Layout>
-    </ChakraProvider>
-    </SessionProvider>
+    <AppProvider>
+      <SessionProvider>
+        <ChakraProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
+      </SessionProvider>
+    </AppProvider>
   );
 }
 

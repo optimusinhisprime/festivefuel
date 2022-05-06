@@ -1,24 +1,32 @@
-import React, { useContext, useReducer, useState } from 'react';
-import { AppContextActions } from '../constants/actions';
+import React, { useContext, useReducer, useState, useEffect } from 'react';
 
-import reducer from '../reducer/appReducer';
+import reducer from '../reducer/AppReducer';
+import serverApi from '../utils/serverApi';
 
-const initialState = {};
+const initialState = {
+  events: [],
+};
 
 const AppContext = React.createContext();
 
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const testFunction = () => {
-    dispatch({ type: AppContextActions.TEST_ACTION });
+  const getEvents = async () => {
+    const {
+      data: { events },
+    } = await serverApi.get('/events');
+    dispatch({ type: 'FETCH_EVENTS', payload: events });
   };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
 
   return (
     <AppContext.Provider
       value={{
         ...state,
-        testFunction,
       }}
     >
       {children}

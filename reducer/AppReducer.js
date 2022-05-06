@@ -1,8 +1,6 @@
-import { AppContextActions } from '../constants/actions';
-
 const reducer = (state, action) => {
-  if (action.type === AppContextActions.TEST_ACTION) {
-    return { ...state };
+  if (action.type === 'FETCH_EVENTS') {
+    return { ...state, events: action.payload };
   }
 
   return state;
