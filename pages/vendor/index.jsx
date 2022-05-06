@@ -45,7 +45,7 @@ const VendorHomepage = () => {
             return (
               <Link
                 href={`vendor/events/${event._id}`}
-                key={event.name}
+                key={event._id}
                 _hover={{ textDecoration: 'none' }}
               >
                 <Flex p={2} border='1px' borderColor='gray.200' w={400} m={5}>
