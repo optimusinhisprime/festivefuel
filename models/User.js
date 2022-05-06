@@ -41,10 +41,12 @@ const UserSchema = new Schema({
     minlength: [10, "Password must be at least 10 characters"],
   },
   extendProfile: {
-    businessName: { type: String },
-    businessNumber: { type: String },
-    businessAddress: { type: String },
-    businessDescription: { type: String },
+
+    businessName: { type: String, required: true },
+    businessNumber: { type: String, required: true },
+    businessAddress: { type: String, required: true },
+    businessDescription: { type: String, required: true },
+
   },
 });
 
