@@ -57,7 +57,7 @@ const loginHandler = async (req, res) => {
   if (passwordsMatch) {
     res.status(StatusCodes.OK).json({
       message: "Successfully logged in",
-      userID: user._id,
+      userId: user._id,
       email: user.email,
       role: user.role,
     });
