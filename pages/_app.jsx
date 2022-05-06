@@ -5,11 +5,13 @@ import { AppProvider } from '../context/appContext';
 function MyApp({ Component, pageProps }) {
   return (
     <AppProvider>
-      <ChakraProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ChakraProvider>
+      <SessionProvider>
+        <ChakraProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
+      </SessionProvider>
     </AppProvider>
   );
 }

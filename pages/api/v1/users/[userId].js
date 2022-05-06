@@ -1,7 +1,7 @@
 import { databaseConnection } from "../../../../utils/db";
 import Cors from "cors";
 import { runMiddleware } from "../../../../middleware/initMiddleware";
-import { singleEventHandler } from "../../../../handlers/singleEventHandler";
+import { userHandler } from "../../../../handlers/userHandler";
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -17,5 +17,5 @@ export const config = {
 export default async function handler(req, res) {
   await runMiddleware(req, res, cors);
 
-  databaseConnection(singleEventHandler, req, res);
+  databaseConnection(userHandler, req, res);
 }
