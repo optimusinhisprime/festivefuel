@@ -18,22 +18,26 @@ const allEventsHandler = async (req, res) => {
       name,
       date,
       time,
+      venue,
       expectedAttendance,
       description,
       images,
       eventCategory,
       organizerId,
+      eventStalls,
     } = req.body;
 
     const event = new Event({
       name: name,
       date: date,
       time: time,
+      venue: venue,
       expectedAttendance: expectedAttendance,
       description: description,
       images: images,
       eventCategory: eventCategory,
       organizerId: organizerId,
+      eventStalls: eventStalls,
     });
 
     event
