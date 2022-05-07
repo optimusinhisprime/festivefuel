@@ -51,7 +51,7 @@ export default NextAuth({
       if (account && user) {
         return {
           ...token,
-          userId: user._id,
+          userId: user.userId,
           role: user.role,
         };
       }
