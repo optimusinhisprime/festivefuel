@@ -1,30 +1,39 @@
 import StallRequest from "../models/StallRequest";
 import { StatusCodes } from "http-status-codes";
-
+import Event from "../models/Event";
+import User from "../models/User";
 const stallRequestHandler = async (req, res) => {
   if (req.method === "GET") {
     const { vendorId } = req.query;
-
-    const stalls = await StallRequest.find({
-      vendorId: vendorId,
-    }).exec();
-
-    if (!stalls) {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Stall request not found" });
-      return;
-    }
-
-    res.status(StatusCodes.OK).json({ stalls });
+    StallRequest.find({
+      vendor: vendorId,
+    })
+      .populate({
+        path: "event",
+        select: "name eventStalls",
+        model: Event,
+      })
+      .populate({
+        path: "vendor",
+        select: "firstname surname extendProfile",
+        model: User,
+      })
+      .exec()
+      .then((docs) => res.status(StatusCodes.OK).json({ stalls: docs }))
+      .catch((err) => {
+        console.log(err);
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: err, stalls: [] });
+      });
   }
 
   if (req.method === "POST") {
-    const { vendorId, eventId, stallId } = req.body;
+    const { vendor, event, stallId } = req.body;
 
     const request = new StallRequest({
-      vendorId,
-      eventId,
+      vendor,
+      event,
       stallId,
     });
 
