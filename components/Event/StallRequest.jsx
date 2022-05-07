@@ -13,19 +13,19 @@ import {
     ModalCloseButton,
   } from '@chakra-ui/react'
 
-const StallRequest = () => {
+const StallRequest = ({vendorName, eventName, stallCategory, date, userProfile}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
       <>
-        <Flex p={2} border='2px' borderColor='gray.400' cursor="pointer" justify="space-between" onClick={onOpen}><Box>Vendor Name</Box> <Box>Event Name</Box> <Box>Stall Category</Box> <Box>Date Made</Box></Flex>
+        <Flex mt={2} mb={2} p={2} border='2px' borderColor='gray.400' cursor="pointer" justify="space-between" onClick={onOpen}><Box>{vendorName}</Box> <Box>{eventName}</Box> <Box>{stallCategory}</Box> <Box>{`${date.split("T")[0]}`}</Box></Flex>
   
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Event Name</ModalHeader>
+            <ModalHeader>{eventName}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              Vendor Information
+             {userProfile}
             </ModalBody>
   
             <ModalFooter>

@@ -2,15 +2,31 @@ import Event from "../models/Event";
 import { StatusCodes } from "http-status-codes";
 
 const allEventsHandler = async (req, res) => {
+  const { organizerId } = req.query;
   if (req.method === "GET") {
-    const events = await Event.find({});
+    if (organizerId) {
+      const events = await Event.find({ organizerId: organizerId }).exec();
 
-    if (!events) {
-      res.status(StatusCodes.NOT_FOUND).json({ message: "Events not found" });
-      return;
+      if (!events) {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "No events found", events: [] });
+        return;
+      }
+
+      res.status(StatusCodes.OK).json({ events });
+    } else {
+      const events = await Event.find({});
+
+      if (!events) {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "No events found", events: [] });
+        return;
+      }
+
+      res.status(StatusCodes.OK).json({ events });
     }
-
-    res.status(StatusCodes.OK).json({ events });
   }
 
   if (req.method === "POST") {
