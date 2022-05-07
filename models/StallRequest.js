@@ -3,8 +3,8 @@ import { Schema } from "mongoose";
 
 const StallRequestSchema = new Schema(
   {
-    eventId: { type: Schema.ObjectId, ref: "Event" },
-    vendorId: { type: Schema.ObjectId, ref: "User" },
+    event: { type: Schema.ObjectId, ref: "Event", required: true },
+    vendor: { type: Schema.ObjectId, ref: "User", required: true },
     expirationDate: { type: Number, default: 0 },
     stallId: { type: Number, required: true },
     requestStatus: {
@@ -14,7 +14,6 @@ const StallRequestSchema = new Schema(
         message: "{VALUE} is not supported",
       },
       default: "pending",
-      required: true,
     },
   },
   {
