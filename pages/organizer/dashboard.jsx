@@ -1,5 +1,6 @@
 import React from "react";
-import { Flex, Heading, VStack, Text } from '@chakra-ui/react'
+import { Flex, Heading, VStack, Text, Box, HStack, StackDivider, Center, ButtonGroup, Button, IconButton } from '@chakra-ui/react'
+import { AddIcon } from "@chakra-ui/icons"
 import Event from "../../components/Event/Event"
 import StallRequest from "../../components/Event/StallRequest";
 import { signOut, getSession } from "next-auth/react";
@@ -11,8 +12,12 @@ const OrganizerDashboard = ({session, events, stallRequests}) => {
     My Events
   </Heading>
   <Flex align="center" w="50%" direction="column" mt={8}>
-    {events.events.map((event)=>{
-      return <Event key={event._id} name={event.name} date={event.date} venue={event.venue} imageUrl={event.images[0]}/>
+  <ButtonGroup mt={1} mb={5} size='sm' isAttached variant='solid'>
+  <Button mr='-px'>Add New Event</Button>
+  <IconButton aria-label='Add to friends' icon={<AddIcon />} />
+</ButtonGroup>
+    {events.events.length === 0 ? <Center><Text>No events posted. 🥲 Click add event to add some.</Text></Center>: events.events.map((event)=>{
+      return <Event key={event._id} event={event}/>
     })}
    
     
@@ -20,20 +25,23 @@ const OrganizerDashboard = ({session, events, stallRequests}) => {
   <Heading mt={10} as='h3' size='lg'>
     Stall Requests
   </Heading>
-  <Flex mb={10} w="50%" direction="column" mt= {8}>
-  {stallRequests.stalls.map((request)=>{
+  <Flex mb={10} w={["90%", "80%", "50%"]} direction="column" mt= {8}>
+    <HStack w={["100%", "100%", "100%"]} p={1} mb={5} borderTop="1px" divider={<StackDivider borderColor='gray.400' />} justify="space-between"><Box>Vendor Name</Box><Box>Event Name</Box> <Box>Type</Box> <Box>Date Requested</Box></HStack>
+  {stallRequests.stalls.length === 0 ? <Center><Text>No Stall Requests Made Yet. 😭</Text></Center> : stallRequests.stalls.map((request)=>{
     const stallCategory = request.event.eventStalls.filter((stall)=>{ 
       return stall.stallId == request.stallId;})
+
+      const{businessName, businessAddress, businessNumber, businessDescription  } = request.vendor.extendProfile;
       const userProfile = <VStack align="left">
-        <Text>Business Name: {request.vendor.extendProfile.businessName}</Text>
-        <Text>Store Number: {request.vendor.extendProfile.businessNumber}</Text>
-        <Text>Store Address: {request.vendor.extendProfile.businessAddress}</Text>
-        <Text>Store Bio: {request.vendor.extendProfile.businessDescription}</Text>
+        <Text>Business Name: {businessName}</Text>
+        <Text>Store Number: {businessNumber}</Text>
+        <Text>Store Address: {businessAddress}</Text>
+        <Text>Store Bio: {businessDescription}</Text>
         </VStack>
     return <StallRequest key={request._id}
     vendorName={`${request.vendor.firstname} ${request.vendor.surname}`} 
     eventName={request.event.name}
-    stallCategory={stallCategory[0].stallId}
+    stallCategory={stallCategory[0].category}
     date={request.createdAt}
     userProfile={userProfile}
     />
@@ -60,7 +68,12 @@ export async function getServerSideProps(context) {
     const eventsResponse = await fetch(eventsEndpoint);
     events = await eventsResponse.json();
 
-    const stallRequestEndpoint = `${process.env.NEXTAUTH_URL}/api/v1/stalls/?vendorId=${session.userId}`;
+    const organizersEventIds = events.events.map((event)=>{
+      return event._id
+    })
+    const JSONdata = JSON.stringify(organizersEventIds);
+    const stallRequestEndpoint = `${process.env.NEXTAUTH_URL}/api/v1/stalls/?organizersEventIds=${JSONdata}`;
+        
     const requestsResponse = await fetch(stallRequestEndpoint);
     stallRequests = await requestsResponse.json();
   }
