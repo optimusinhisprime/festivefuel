@@ -5,27 +5,55 @@ import User from "../models/User";
 const stallRequestHandler = async (req, res) => {
   if (req.method === "GET") {
     const { vendorId } = req.query;
-    StallRequest.find({
-      vendor: vendorId,
-    })
-      .populate({
-        path: "event",
-        select: "name eventStalls",
-        model: Event,
+
+    // GET REQUEST MADE FOR THE VENDORS STALL REQUESTS
+    if (vendorId) {
+      StallRequest.find({
+        vendor: vendorId,
       })
-      .populate({
-        path: "vendor",
-        select: "firstname surname extendProfile",
-        model: User,
-      })
-      .exec()
-      .then((docs) => res.status(StatusCodes.OK).json({ stalls: docs }))
-      .catch((err) => {
-        console.log(err);
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: err, stalls: [] });
-      });
+        .populate({
+          path: "event",
+          select: "name eventStalls",
+          model: Event,
+        })
+        .populate({
+          path: "vendor",
+          select: "firstname surname extendProfile",
+          model: User,
+        })
+        .exec()
+        .then((docs) => res.status(StatusCodes.OK).json({ stalls: docs }))
+        .catch((err) => {
+          console.log(err);
+          res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err, stalls: [] });
+        });
+    } else {
+      // GET REQUEST FOR THE STALL REQUESTS PER EVENTS OWNED BY AN ORGANIZER
+      const { organizersEventIds } = req.query;
+      const eventIdsArray = JSON.parse(organizersEventIds);
+      StallRequest.find()
+        .where("event")
+        .in(eventIdsArray)
+        .populate({
+          path: "event",
+          select: "name eventStalls",
+          model: Event,
+        })
+        .populate({
+          path: "vendor",
+          select: "firstname surname extendProfile",
+          model: User,
+        })
+        .then((docs) => res.status(StatusCodes.OK).json({ stalls: docs }))
+        .catch((err) => {
+          console.log(err);
+          res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err, stalls: [] });
+        });
+    }
   }
 
   if (req.method === "POST") {

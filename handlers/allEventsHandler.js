@@ -8,7 +8,9 @@ const allEventsHandler = async (req, res) => {
       const events = await Event.find({ organizerId: organizerId }).exec();
 
       if (!events) {
-        res.status(StatusCodes.NOT_FOUND).json({ message: "No events found" });
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "No events found", events: [] });
         return;
       }
 
@@ -17,7 +19,9 @@ const allEventsHandler = async (req, res) => {
       const events = await Event.find({});
 
       if (!events) {
-        res.status(StatusCodes.NOT_FOUND).json({ message: "No events found" });
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "No events found", events: [] });
         return;
       }
 
