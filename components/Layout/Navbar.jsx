@@ -11,7 +11,7 @@ export default function Navbar({children}) {
 
         <Flex >
         <Menu>
-  <MenuButton as={Button} rightIcon={<GrFormDown />}>
+  <MenuButton size="sm" as={Button} rightIcon={<GrFormDown />}>
     Profile
   </MenuButton>
   <MenuList>
@@ -22,7 +22,7 @@ export default function Navbar({children}) {
    <MenuItem>Logout</MenuItem>
   </MenuList>
 </Menu>
-          <Button ml={3} leftIcon={<GrLogin/>} variant="solid">Sign In</Button>
+          <Button size="sm" ml={3} leftIcon={<GrLogin/>} variant="solid">Sign In</Button>
           </Flex>
       
     </Flex>
