@@ -14,8 +14,8 @@ export const config = {
   },
 };
 
-export default async function handler(req, res) {
+export default async (req, res) => {
   await runMiddleware(req, res, cors);
 
   databaseConnection(allEventsHandler, req, res);
-}
+};
