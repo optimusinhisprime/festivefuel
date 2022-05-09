@@ -101,7 +101,8 @@ const CreateEventPage = ({ session }) => {
               .then(function (response) {
                 toast({
                   title: "Event created successfully.",
-                  description: "We've created your account for you.",
+                  description:
+                    "Come back again later and check your stall requests.",
                   status: "success",
                   duration: 9000,
                   isClosable: false,
