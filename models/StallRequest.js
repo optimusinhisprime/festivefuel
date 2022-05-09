@@ -6,7 +6,7 @@ const StallRequestSchema = new Schema(
     event: { type: Schema.ObjectId, ref: "Event", required: true },
     vendor: { type: Schema.ObjectId, ref: "User", required: true },
     expirationDate: { type: Number, default: 0 },
-    stallId: { type: Number, required: true },
+    stallId: { type: String, required: true },
     requestStatus: {
       type: String,
       enum: {
