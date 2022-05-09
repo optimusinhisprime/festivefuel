@@ -13,7 +13,7 @@ const VendorHomepage = () => {
       <Box>
         <Carousel showThumbs={false}>
           <Box>
-            <Image src='https://scontent.fgbe1-1.fna.fbcdn.net/v/t39.30808-6/217552954_4081151411953507_4736424485762953141_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=730e14&_nc_ohc=aJB_gyyBCYYAX9FRALt&_nc_ht=scontent.fgbe1-1.fna&oh=00_AT8wfZUqplgRM13_pDEyE1Xxi8EXX9Jhp1X6lhT6yGfN1g&oe=6275DDF8' />
+            <Image src='https://umfworldwide.com/wp-content/uploads/2020/02/south-africa-lineup-final-news-thumb-2020.jpg' />
             <Text className='legend'>
               Ultra Music Festival South Africa 2022
             </Text>
@@ -49,7 +49,7 @@ const VendorHomepage = () => {
                 _hover={{ textDecoration: 'none' }}
               >
                 <Flex p={2} border='1px' borderColor='gray.200' w={400} m={5}>
-                  <Image w={100} src={event.logo} />
+                  <Image w={100} src={event.images[0]} />
                   <Flex ml={3} direction='column'>
                     <Text mb={3} fontSize='lg'>
                       {event.name}
