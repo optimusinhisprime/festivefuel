@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 import {
   Flex,
@@ -11,28 +10,28 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-
-} from "@chakra-ui/react";
-import { GrLogin, GrFormDown } from "react-icons/gr";
+} from '@chakra-ui/react';
+import { GrLogin, GrFormDown } from 'react-icons/gr';
+import { useCartContext } from '../../context/CartContext';
 
 export default function Navbar({ children }) {
+  const { total_items } = useCartContext();
   return (
     <Flex
-      direction={["column", "row"]}
-      bg="#000E44"
+      direction={['column', 'row']}
+      bg='#000E44'
       pr={7}
       pl={7}
-      align="center"
-      justify="space-between"
+      align='center'
+      justify='space-between'
     >
       <Box>
-        <Image w={["100%", 200]} src="/festivalfuel-logo.png" />
+        <Image w={['100%', 200]} src='/festivalfuel-logo.png' />
       </Box>
 
       <Flex mt={[10, 0, 0, 0]} mb={[5, 0, 0, 0]}>
         <Menu>
-          <MenuButton size="sm" as={Button} rightIcon={<GrFormDown />}>
-
+          <MenuButton size='sm' as={Button} rightIcon={<GrFormDown />}>
             Profile
           </MenuButton>
           <MenuList>
@@ -45,8 +44,7 @@ export default function Navbar({ children }) {
           </MenuList>
         </Menu>
 
-        <Button size="sm" ml={3} leftIcon={<GrLogin />} variant="solid">
-
+        <Button size='sm' ml={3} leftIcon={<GrLogin />} variant='solid'>
           Sign In
         </Button>
       </Flex>
