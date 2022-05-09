@@ -76,29 +76,29 @@ const OrganizerDashboard = ({ session, events, stallRequests }) => {
             const stallCategory = request.event.eventStalls.filter((stall) => {
               return stall.stallId == request.stallId;
             });
-
-            const {
-              businessName,
-              businessAddress,
-              businessNumber,
-              businessDescription,
-            } = request.vendor.extendProfile;
-            const userProfile = (
-              <VStack align="left">
-                <Text>Business Name: {businessName}</Text>
-                <Text>Store Number: {businessNumber}</Text>
-                <Text>Store Address: {businessAddress}</Text>
-                <Text>Store Bio: {businessDescription}</Text>
-              </VStack>
-            );
+            // const {
+            //   businessName,
+            //   businessAddress,
+            //   businessNumber,
+            //   businessDescription,
+            // } = request.vendor.extendProfile;
+            // const userProfile = (
+            //   <VStack align="left">
+            //     <Text>Business Name: {businessName}</Text>
+            //     <Text>Store Number: {businessNumber}</Text>
+            //     <Text>Store Address: {businessAddress}</Text>
+            //     <Text>Store Bio: {businessDescription}</Text>
+            //   </VStack>
+            // );
             return (
               <StallRequest
                 key={request._id}
+                requestId={request._id}
                 vendorName={`${request.vendor.firstname} ${request.vendor.surname}`}
-                eventName={request.event.name}
+                eventName={request.event.eventName}
                 stallCategory={stallCategory[0].category}
                 date={request.createdAt}
-                userProfile={userProfile}
+                // userProfile={userProfile}
               />
             );
           })
