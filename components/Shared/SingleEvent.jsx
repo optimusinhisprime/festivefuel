@@ -14,18 +14,24 @@ import EventImages from './EventImages';
 import EventInfo from './EventInfo';
 import EventStalls from './EventStalls';
 import serverApi from '../../utils/serverApi';
+import { useCartContext } from '../../context/CartContext';
 
 const SingleEvent = ({ event }) => {
+  const { addToCart } = useCartContext();
   const [stallRequested, setStallRequested] = useState(false);
   const requestStall = async (stallId) => {
-    const { request } = await serverApi.post('/stalls', {
+    const stallRequest = {
       vendor: '6273f553d2a5af0d9747b60c',
       event: event._id,
       stallId: stallId,
-    });
+    };
+
+    const { request } = await serverApi.post('/stalls', stallRequest);
 
     if (request.status === 201) {
-      setStallRequested(true);
+      stallRequest.id =
+        stallRequest.vendor + stallRequest.event + stallRequest.stallId;
+      addToCart(stallRequest);
     }
 
     // console.log(data);
@@ -44,6 +50,7 @@ const SingleEvent = ({ event }) => {
                   requestStall={requestStall}
                   stall={stall}
                   key={stall.stallId}
+                  eventId={event._id}
                 />
               );
             })}
