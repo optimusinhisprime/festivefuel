@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Image, Box, Heading, Button } from '@chakra-ui/react';
 import {
@@ -12,8 +12,25 @@ import {
 } from '@chakra-ui/react';
 import EventImages from './EventImages';
 import EventInfo from './EventInfo';
+import EventStalls from './EventStalls';
+import serverApi from '../../utils/serverApi';
 
 const SingleEvent = ({ event }) => {
+  const [stallRequested, setStallRequested] = useState(false);
+  const requestStall = async (stallId) => {
+    const { request } = await serverApi.post('/stalls', {
+      vendor: '6273f553d2a5af0d9747b60c',
+      event: event._id,
+      stallId: stallId,
+    });
+
+    if (request.status === 201) {
+      setStallRequested(true);
+    }
+
+    // console.log(data);
+  };
+
   if (event)
     return (
       <Wrapper>
@@ -21,6 +38,15 @@ const SingleEvent = ({ event }) => {
           <div className='event-center'>
             <EventImages images={event.images} />
             <EventInfo event={event} />
+            {event.eventStalls.map((stall) => {
+              return (
+                <EventStalls
+                  requestStall={requestStall}
+                  stall={stall}
+                  key={stall.stallId}
+                />
+              );
+            })}
           </div>
         </div>
       </Wrapper>
