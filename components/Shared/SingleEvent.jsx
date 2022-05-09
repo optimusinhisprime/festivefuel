@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex, Image, Box, Heading, Button } from '@chakra-ui/react';
 import {
@@ -12,8 +12,31 @@ import {
 } from '@chakra-ui/react';
 import EventImages from './EventImages';
 import EventInfo from './EventInfo';
+import EventStalls from './EventStalls';
+import serverApi from '../../utils/serverApi';
+import { useCartContext } from '../../context/CartContext';
 
 const SingleEvent = ({ event }) => {
+  const { addToCart } = useCartContext();
+  const [stallRequested, setStallRequested] = useState(false);
+  const requestStall = async (stallId) => {
+    const stallRequest = {
+      vendor: '6273f553d2a5af0d9747b60c',
+      event: event._id,
+      stallId: stallId,
+    };
+
+    const { request } = await serverApi.post('/stalls', stallRequest);
+
+    if (request.status === 201) {
+      stallRequest.id =
+        stallRequest.vendor + stallRequest.event + stallRequest.stallId;
+      addToCart(stallRequest);
+    }
+
+    // console.log(data);
+  };
+
   if (event)
     return (
       <Wrapper>
@@ -21,6 +44,16 @@ const SingleEvent = ({ event }) => {
           <div className='event-center'>
             <EventImages images={event.images} />
             <EventInfo event={event} />
+            {event.eventStalls.map((stall) => {
+              return (
+                <EventStalls
+                  requestStall={requestStall}
+                  stall={stall}
+                  key={stall.stallId}
+                  eventId={event._id}
+                />
+              );
+            })}
           </div>
         </div>
       </Wrapper>
