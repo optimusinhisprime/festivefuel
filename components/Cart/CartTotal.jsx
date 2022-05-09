@@ -16,7 +16,9 @@ const CartTotal = () => {
           </h5>
 
           <hr />
-          <h4>{/* order total :<span>{formatPrice(total_amount)}</span> */}</h4>
+          <h4>
+            order total :<span>{formatPrice(total_amount)}</span>
+          </h4>
         </article>
         {/* // checkout here */}
       </div>
