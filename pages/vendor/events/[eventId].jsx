@@ -14,7 +14,6 @@ const SingleEventPage = () => {
     const {
       data: { event },
     } = await serverApi.get(`/events/${id}`);
-    console.log(event);
     setEvent(event);
     setLoading(false);
   };
@@ -22,7 +21,6 @@ const SingleEventPage = () => {
   React.useEffect(() => {
     if (!router.isReady) return;
     const { eventId } = router.query;
-    console.log(eventId);
 
     getEvent(eventId);
   }, [router.isReady]);

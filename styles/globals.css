@@ -8,6 +8,7 @@
   --fixed-width: 620px;
   --clr-primary: hsl(26, 100%, 55%);
   --clr-white: hsl(0, 0%, 100%);
+  --clr-black: hsl(0, 0%, 0%);
   --clr-accent: hsl(25, 100%, 94%);
   --clr-gray-accent: hsl(223, 64%, 98%);
 
