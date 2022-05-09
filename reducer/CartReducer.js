@@ -4,7 +4,11 @@ const reducer = (state, action) => {
 
     if (itemExists) {
     } else {
-      return { ...state, cart: [...state.cart, action.payload] };
+      return {
+        ...state,
+        cart: [...state.cart, action.payload],
+        total_items: state.total_items + 1,
+      };
     }
   }
 
