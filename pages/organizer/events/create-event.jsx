@@ -1,8 +1,8 @@
 import React from "react";
+import Router from "next/router";
 import {
   useDisclosure,
   Flex,
-  Select,
   Textarea,
   Box,
   Heading,
@@ -12,18 +12,35 @@ import {
   FormErrorMessage,
   CloseButton,
   Input,
+  useToast,
   Collapse,
 } from "@chakra-ui/react";
 import { Formik, Form, Field, FieldArray } from "formik";
-const CreateEventPage = () => {
+import { v4 as uuidv4 } from "uuid";
+import { signOut, getSession } from "next-auth/react";
+const axios = require("axios");
+// const { Storage } = require("@google-cloud/storage");
+
+const CreateEventPage = ({ session }) => {
+  // const storage = new Storage();
   const { isOpen, onToggle } = useDisclosure();
+  const toast = useToast();
   return (
-    <Box align="center">
-      <Heading mt={10} mb={10} as="h2" size="lg">
+    <Box
+      backgroundImage="url('/create-event.jpg')"
+      backgroundPosition="center center"
+      backgroundRepeat="no-repeat"
+      backgroundSize="cover"
+      backgroundAttachment="fixed"
+      align="center"
+      color="white"
+      pb={10}
+    >
+      <Heading pt={10} mb={10} as="h1" size="xl">
         Create New Event
       </Heading>
-      <Box w={["90%", "70%", "50%"]}>
-        <Button size="sm" onClick={onToggle}>
+      <Box w={["90%", "70%", "70%", "50%"]}>
+        <Button color="black" size="sm" onClick={onToggle}>
           View Instructions
         </Button>
         <Collapse in={isOpen} animateOpacity>
@@ -39,235 +56,238 @@ const CreateEventPage = () => {
           </Box>
         </Collapse>
       </Box>
-      <Box mt={5} w={["90%", "70%", "50%"]}>
+      <Box
+        rounded="md"
+        bg="#112B3C"
+        p={10}
+        mt={5}
+        w={["90%", "70%", "70%", "50%"]}
+      >
         <Formik
           initialValues={{
-            name: "",
+            eventName: "",
             date: "",
             time: "",
             venue: "",
             expectedAttendance: "",
             description: "",
-            images: [],
-            eventCategory: [],
-            eventStalls: [
-              {
-                stallId: Math.floor(Math.random()),
-                category: "",
-                price: "",
-                available: "",
-              },
-            ],
+            images: null,
+            eventCategory: "",
+            eventStalls: [],
           }}
           validate={(values) => {
             const errors = {};
-            if (!values.name) {
-              errors.name = "Required";
-            } else if (
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-            ) {
-              errors.name = "Invalid email address";
+            if (!values.eventName) {
+              errors.eventName = "Required";
             }
             return errors;
           }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 400);
+          onSubmit={async (values, { setSubmitting }) => {
+            values.organizerId = session.userId;
+
+            const formData = new FormData();
+            Object.entries(values).forEach(([key, value]) => {
+              if (key === "eventStalls") {
+                const stallArray = JSON.stringify(value);
+                formData.append(key, stallArray);
+              } else {
+                formData.append(key, value);
+              }
+            });
+
+            const endpoint = `/api/v1/events`;
+            axios
+              .post(endpoint, formData)
+              .then(function (response) {
+                toast({
+                  title: "Event created successfully.",
+                  description: "We've created your account for you.",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: false,
+                });
+                Router.push("/organizer/dashboard");
+              })
+              .catch(function (error) {
+                console.log(error);
+                setSubmitting(false);
+              });
           }}
         >
-          {({ values, errors, touched, isSubmitting }) => (
-            <Form>
-              <Field type="email" name="email">
+          {({ values, errors, touched, isSubmitting, setFieldValue }) => (
+            <Form encType="multipart/form-data">
+              <Field type="text" name="eventName">
                 {({ field }) => (
                   <FormControl
                     mt={2}
                     mb={3}
-                    isInvalid={errors.email && touched.email}
+                    isInvalid={errors.eventName && touched.eventName}
                   >
-                    <FormLabel htmlFor="name">Event Name</FormLabel>
-                    <Input {...field} id="name" type="text" />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    <FormLabel htmlFor="eventName">Event Name</FormLabel>
+                    <Input {...field} id="eventName" type="text" />
+                    <FormErrorMessage>{errors.eventName}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
-              <Field type="email" name="email">
+              <Field type="text" name="venue">
                 {({ field }) => (
                   <FormControl
                     mt={2}
                     mb={3}
-                    isInvalid={errors.email && touched.email}
+                    isInvalid={errors.venue && touched.venue}
                   >
-                    <FormLabel htmlFor="name">Event Venue</FormLabel>
-                    <Input {...field} id="name" type="text" />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    <FormLabel htmlFor="venue">Event Venue</FormLabel>
+                    <Input {...field} id="venue" type="text" />
+                    <FormErrorMessage>{errors.venue}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>
 
-              <Flex direction={["column", "column", "row"]}>
-                <Field type="email" name="email">
+              <Flex direction={["column", "column", "column", "row"]}>
+                <Field type="date" name="date">
                   {({ field }) => (
-                    <FormControl
-                      mt={2}
-                      mb={3}
-                      mr={5}
-                      isInvalid={errors.email && touched.email}
-                    >
-                      <FormLabel htmlFor="name">Date</FormLabel>
-                      <Input {...field} id="name" type="date" />
-                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    <FormControl mt={2} mb={3} mr={5}>
+                      <FormLabel htmlFor="date">Date</FormLabel>
+                      <Input {...field} id="date" type="date" required />
                     </FormControl>
                   )}
                 </Field>
-                <Field type="email" name="email">
+                <Field type="time" name="time">
                   {({ field }) => (
-                    <FormControl
-                      mt={2}
-                      mb={3}
-                      isInvalid={errors.email && touched.email}
-                    >
+                    <FormControl mt={2} mb={3}>
                       <FormLabel htmlFor="name">Time</FormLabel>
-                      <Input {...field} id="name" type="time" />
-                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                      <Input {...field} id="name" type="time" required />
                     </FormControl>
                   )}
                 </Field>
               </Flex>
 
-              <Flex direction={["column", "column", "row"]}>
-                <Field type="email" name="email">
+              <Flex direction={["column", "column", "column", "row"]}>
+                <Field type="number" name="expectedAttendance">
                   {({ field }) => (
                     <FormControl
                       mt={2}
                       mb={3}
                       mr={5}
-                      isInvalid={errors.email && touched.email}
+                      isInvalid={
+                        errors.expectedAttendance && touched.expectedAttendance
+                      }
                     >
-                      <FormLabel htmlFor="name">Expected Attendance</FormLabel>
-                      <Input {...field} id="name" type="number" />
-                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                      <FormLabel htmlFor="expectedAttendance">
+                        Expected Attendance
+                      </FormLabel>
+                      <Input {...field} id="expectedAttendance" type="number" />
+                      <FormErrorMessage>
+                        {errors.expectedAttendance}
+                      </FormErrorMessage>
                     </FormControl>
                   )}
                 </Field>
-                <Field type="email" name="email">
-                  {({ field }) => (
-                    <FormControl
-                      mt={2}
-                      mb={3}
-                      isInvalid={errors.email && touched.email}
-                    >
-                      <FormLabel htmlFor="name">Event Category</FormLabel>
-                      <Select id="country" placeholder="Select Category">
-                        <option>Festival</option>
-                        <option>Protest</option>
-                        <option>Conference</option>
-                        <option>Expo</option>
-                        <option>Concert</option>
-                        <option>Sports</option>
-                        <option>Performing Arts</option>
-                        <option>Community</option>
-                        <option>Awards & Competition</option>
-                      </Select>
-                      <FormErrorMessage>{errors.email}</FormErrorMessage>
-                    </FormControl>
-                  )}
-                </Field>
+
+                <FormControl>
+                  <FormLabel htmlFor="eventCategory">Event Category</FormLabel>
+                  <Field
+                    style={{ color: "black" }}
+                    as="select"
+                    name="eventCategory"
+                    required
+                  >
+                    <option disabled value="">
+                      (Make a Selection)
+                    </option>
+                    <option>Festival</option>
+                    <option>Protest</option>
+                    <option>Conference</option>
+                    <option>Expo</option>
+                    <option>Concert</option>
+                    <option>Sports</option>
+                    <option>Performing Arts</option>
+                    <option>Community</option>
+                    <option>Awards & Competition</option>
+                  </Field>
+                </FormControl>
               </Flex>
 
-              <Field type="email" name="email">
+              <Field as="textarea" name="description">
                 {({ field }) => (
                   <FormControl
                     mt={2}
                     mb={3}
                     mr={5}
-                    isInvalid={errors.email && touched.email}
+                    isInvalid={errors.description && touched.description}
+                    required
                   >
-                    <FormLabel htmlFor="name">Event Description</FormLabel>
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                    <Textarea placeholder="Here is a sample placeholder" />
+                    <FormLabel htmlFor="description">
+                      Event Description
+                    </FormLabel>
+                    <FormErrorMessage>{errors.description}</FormErrorMessage>
+                    <Textarea
+                      {...field}
+                      placeholder="Here is a sample placeholder"
+                    />
                   </FormControl>
                 )}
               </Field>
 
-              <FormControl
-                mt={2}
-                mb={3}
-                mr={5}
-                isInvalid={errors.email && touched.email}
-              >
-                <FormLabel htmlFor="name">Upload event images</FormLabel>
-                <FormErrorMessage>{errors.email}</FormErrorMessage>
-                <Input
-                  p={3}
-                  h="auto"
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  required
-                  multiple="multiple"
-                ></Input>
-              </FormControl>
-
+              <Field>
+                {({ form }) => (
+                  <FormControl mt={2} mb={3} mr={5}>
+                    <FormLabel htmlFor="images">
+                      Upload Event Poster or Image to be Displayed
+                    </FormLabel>
+                    <Input
+                      p={3}
+                      h="auto"
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      required
+                      onChange={(e) => {
+                        setFieldValue("images", e.target.files[0]);
+                      }}
+                    />
+                  </FormControl>
+                )}
+              </Field>
               <FieldArray name="eventStalls">
                 {({ insert, remove, push, field }) => (
                   <Box>
                     {values.eventStalls.length > 0 &&
                       values.eventStalls.map((stall, index) => (
-                        <Flex>
-                          <FormControl
-                            mt={2}
-                            mb={3}
-                            mr={5}
-                            isInvalid={errors.email && touched.email}
-                          >
-                            <FormLabel
-                              htmlFor={`eventStalls.${index}.category`}
-                            >
+                        <Flex direction="column" key={index}>
+                          <Box align="left">
+                            <label htmlFor={`eventStalls.${index}.category`}>
                               Stall Category
-                            </FormLabel>
-                            <Input
-                              {...field}
-                              id={`eventStalls.${index}.category`}
+                            </label>
+                            <Field
+                              name={`eventStalls.${index}.category`}
+                              placeholder="Food"
                               type="text"
+                              style={{ color: "black" }}
                             />
-                            <FormErrorMessage>{errors.email}</FormErrorMessage>
-                          </FormControl>
-                          <FormControl
-                            mt={2}
-                            mb={3}
-                            mr={5}
-                            isInvalid={errors.email && touched.email}
-                          >
-                            <FormLabel htmlFor={`eventStalls.${index}.price`}>
+                          </Box>
+                          <Box align="left">
+                            <label htmlFor={`eventStalls.${index}.price`}>
                               Price
-                            </FormLabel>
-                            <Input
-                              {...field}
-                              id={`eventStalls.${index}.price`}
+                            </label>
+                            <Field
+                              name={`eventStalls.${index}.price`}
+                              placeholder="P2000.00"
                               type="text"
+                              style={{ color: "black" }}
                             />
-                            <FormErrorMessage>{errors.email}</FormErrorMessage>
-                          </FormControl>
-                          <FormControl
-                            mt={2}
-                            mb={3}
-                            mr={5}
-                            isInvalid={errors.email && touched.email}
-                          >
-                            <FormLabel
-                              htmlFor={`eventStalls.${index}.available`}
-                            >
-                              How Many?
-                            </FormLabel>
-                            <Input
-                              {...field}
-                              id={`eventStalls.${index}.available`}
-                              type="number"
+                          </Box>
+                          <Box align="left">
+                            <label htmlFor={`eventStalls.${index}.available`}>
+                              How many stalls are available?
+                            </label>
+                            <Field
+                              name={`eventStalls.${index}.available`}
+                              placeholder="200"
+                              type="text"
+                              style={{ color: "black" }}
                             />
-                            <FormErrorMessage>{errors.email}</FormErrorMessage>
-                          </FormControl>
+                          </Box>
                           <CloseButton
                             onClick={() => {
                               remove(index);
@@ -276,22 +296,30 @@ const CreateEventPage = () => {
                         </Flex>
                       ))}
                     <Button
+                      mt={5}
+                      color="black"
                       onClick={() => {
                         push({
-                          stallId: Math.floor(Math.random()),
+                          stallId: uuidv4(),
                           category: "",
                           price: "",
                           available: "",
                         });
                       }}
                     >
-                      Add New Stall
+                      Add New Event Stall
                     </Button>
                   </Box>
                 )}
               </FieldArray>
 
-              <Button mt={10} mb={5} type="submit" disabled={isSubmitting}>
+              <Button
+                color="black"
+                mt={10}
+                mb={5}
+                type="submit"
+                disabled={isSubmitting}
+              >
                 Create Event
               </Button>
             </Form>
@@ -303,3 +331,21 @@ const CreateEventPage = () => {
 };
 
 export default CreateEventPage;
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session: session,
+    },
+  };
+}
