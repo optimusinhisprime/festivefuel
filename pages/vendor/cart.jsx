@@ -1,7 +1,8 @@
 import React from 'react';
-import { useCartContext } from '../../context/CartContext';
 import styled from 'styled-components';
 import { Link } from '@chakra-ui/react';
+import { useCartContext } from '../../context/CartContext';
+import CartContent from '../../components/Cart/CartContent';
 
 export default function ShoppingCart() {
   const { cart } = useCartContext();
@@ -15,7 +16,11 @@ export default function ShoppingCart() {
     );
   }
 
-  return <div>Shopping Cart Page</div>;
+  return (
+    <main>
+      <CartContent />
+    </main>
+  );
 }
 
 const Wrapper = styled.main`

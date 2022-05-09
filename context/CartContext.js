@@ -29,6 +29,8 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'ADD_TO_CART', payload: stallRequest });
   };
 
+  const clearCart = () => {};
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(state.cart));
   }, [state.cart]);
