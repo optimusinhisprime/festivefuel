@@ -38,7 +38,7 @@ const stallRequestHandler = async (req, res) => {
         .in(eventIdsArray)
         .populate({
           path: "event",
-          select: "name eventStalls",
+          select: "eventName eventStalls",
           model: Event,
         })
         .populate({
