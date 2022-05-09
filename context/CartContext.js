@@ -3,8 +3,19 @@ import React, { useContext, useReducer, useState, useEffect } from 'react';
 import cartReducer from '../reducer/CartReducer';
 import serverApi from '../utils/serverApi';
 
+const getLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    let cart = localStorage.getItem('cart');
+    if (cart) {
+      return JSON.parse(localStorage.getItem('cart'));
+    } else {
+      return [];
+    }
+  }
+};
+
 const initialState = {
-  cart: [],
+  cart: getLocalStorage(),
   total_items: 0,
   total_amount: 0,
 };
@@ -17,6 +28,10 @@ export const CartProvider = ({ children }) => {
   const addToCart = (stallRequest) => {
     dispatch({ type: 'ADD_TO_CART', payload: stallRequest });
   };
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(state.cart));
+  }, [state.cart]);
 
   return (
     <CartContext.Provider
