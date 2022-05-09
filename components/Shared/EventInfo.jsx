@@ -1,22 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
-import { HStack, Tag } from '@chakra-ui/react';
+import React from "react";
+import styled from "styled-components";
+import { HStack, Tag } from "@chakra-ui/react";
 const EventInfo = ({ event }) => {
   return (
-    <Wrapper className='content'>
-      <h5 className='company'>{event.name}</h5>
-      <p className='price'>
+    <Wrapper className="content">
+      <h5 className="company">{event.eventName}</h5>
+      <p className="price">
         Expected Attendance: {event.expectedAttendance} people
       </p>
       <p>{event.description}</p>
       <h2>
         Date: {event.date}, {event.time}
       </h2>
-      <h2>Venue: {event.venue || 'Big Momma House'}</h2>
-      <h4 style={{ marginTop: '50px', marginBottom: '10px' }}>Categories</h4>
+      <h2>Venue: {event.venue || "Big Momma House"}</h2>
+      <h4 style={{ marginTop: "50px", marginBottom: "10px" }}>Categories</h4>
       <HStack spacing={4}>
         {event.eventCategory.map((event) => (
-          <Tag size='lg' key={event} variant='solid' colorScheme='orange'>
+          <Tag size="lg" key={event} variant="solid" colorScheme="orange">
             #{event}
           </Tag>
         ))}
