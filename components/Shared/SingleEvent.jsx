@@ -24,6 +24,7 @@ const SingleEvent = ({ event }) => {
       vendor: '6273f553d2a5af0d9747b60c',
       event: event._id,
       stallId: stallId,
+      eventObj: event,
     };
 
     const { request } = await serverApi.post('/stalls', stallRequest);
