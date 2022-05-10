@@ -69,7 +69,7 @@ const Login = () => {
           />
           {errors.password && touched.password && errors.password}
           <br/>
-          <Button type="submit" disabled={isSubmitting} style={{marginTop: 40, width: '100%'}} >
+          <Button type="submit" disabled={isSubmitting} style={{marginTop: 40, width: '100%', backgroundColor: '#000E44', color: 'white'}} >
             Login
           </Button>
         </form>
