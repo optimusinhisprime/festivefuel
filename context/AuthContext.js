@@ -43,10 +43,47 @@ const AuthProvider = ({children}) =>{
           }
     
         }
+
+
+    const register = async (
+        firstname,
+        surname,
+        address,
+        phoneNumber,
+        email,
+        password,
+        role) =>{
+            dispatch({type: 'REGISTER'}) 
+            try{
+                const res =   await serverApi.post('/signup',{
+                    firstname,
+                    surname,
+                    address,
+                    phoneNumber,
+                    email,
+                    password,
+                    role
+                })
+                .catch((error)=>{
+                    dispatch({type: 'ERROR'})
+                    alert(error.response.data.message)
+                })
+               
+                if(res.status === 200){
+                  alert(res.data.message)
+                }
+                dispatch({type: 'REGISTER', payload: res.data})
+                
+              }catch(error){
+             
+               
+              }
+        
+            }
     
 
     return (
-        <AuthContext.Provider value={{...state, email, role, userId, login}}>
+        <AuthContext.Provider value={{...state, email, role, userId, login, register}}>
           {children}
         </AuthContext.Provider>
       );
