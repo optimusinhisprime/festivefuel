@@ -50,7 +50,6 @@ const signupHandler = async (req, res) => {
         surname: surname,
         phoneNumber: phoneNumber,
         role: role,
-        password: password,
         address: address,
         email: email,
         password: password,

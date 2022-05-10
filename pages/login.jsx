@@ -1,9 +1,24 @@
 import React from "react";
 import { Formik } from 'formik';
 import { Flex, Input , Box, Heading, Button } from "@chakra-ui/react";
+import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import serverApi from "../utils/serverApi";
+const instance = axios.create();
 
-const Login = () => (
-  <Flex h="80vh" justify="center" align="center" direction="column">
+
+const Login = () => {
+  const [submitting, setFormSubmitting] = useState(false)
+  const {...state} = useContext(AuthContext)
+
+    const submit =   (values) =>{
+      state.login(values.email, values.password)
+    }
+
+  return(
+    <Flex h="80vh" justify="center" align="center" direction="column">
     <Heading>Welcome Back</Heading>
     <Formik
       initialValues={{ email: '', password: '' }}
@@ -19,10 +34,8 @@ const Login = () => (
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
+          submit(values)
+          setSubmitting(submitting)
       }}
     >
       {({
@@ -56,13 +69,14 @@ const Login = () => (
           />
           {errors.password && touched.password && errors.password}
           <br/>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} style={{marginTop: 40, width: '100%', backgroundColor: '#000E44', color: 'white'}} >
             Login
           </Button>
         </form>
       )}
     </Formik>
   </Flex>
-);
+  )
+};
 
 export default Login;
