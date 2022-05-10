@@ -34,11 +34,7 @@ const AuthProvider = ({children}) =>{
               setEmail(res.data.email)
               setRole(res.data.role)
               Router.push('/')
-              alert(res.data.message)
             }
-      
-    
-     
             dispatch({type: 'LOGIN', payload: res.data})
             
           }catch(error){
@@ -50,7 +46,7 @@ const AuthProvider = ({children}) =>{
     
 
     return (
-        <AuthContext.Provider value={{email, role, userId, login}}>
+        <AuthContext.Provider value={{...state, email, role, userId, login}}>
           {children}
         </AuthContext.Provider>
       );

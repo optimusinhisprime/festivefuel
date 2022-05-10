@@ -13,9 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { GrLogin, GrFormDown } from 'react-icons/gr';
 import { useCartContext } from '../../context/CartContext';
+import { useCallback } from 'react';
+import Router from 'next/router'
 
 export default function Navbar({ children }) {
   const { total_items } = useCartContext();
+
+  const signin =  useCallback(()=>{
+    Router.push('/login')
+  })
   return (
     <Flex
       direction={['column', 'row']}
@@ -44,7 +50,7 @@ export default function Navbar({ children }) {
           </MenuList>
         </Menu>
 
-        <Button size='sm' ml={3} leftIcon={<GrLogin />} variant='solid'>
+        <Button size='sm' ml={3} leftIcon={<GrLogin />} variant='solid' onClick={signin} >
           Sign In
         </Button>
       </Flex>
