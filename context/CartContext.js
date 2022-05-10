@@ -29,7 +29,13 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'ADD_TO_CART', payload: stallRequest });
   };
 
-  const clearCart = () => {};
+  const removeItem = (id) => {
+    dispatch({ type: 'REMOVE_CART_ITEM', payload: id });
+  };
+
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' });
+  };
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(state.cart));
@@ -40,6 +46,8 @@ export const CartProvider = ({ children }) => {
       value={{
         ...state,
         addToCart,
+        removeItem,
+        clearCart,
       }}
     >
       {children}
