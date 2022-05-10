@@ -3,6 +3,7 @@ import { useState } from "react";
 import { createContext, FC } from "react";
 import reducer from "../reducer/Authreducer";
 import serverApi from "../utils/serverApi";
+import Router from 'next/router'
 
 const AuthContext = createContext()
 const initialState = {
@@ -32,6 +33,7 @@ const AuthProvider = ({children}) =>{
               setUserid(res.data.userId)
               setEmail(res.data.email)
               setRole(res.data.role)
+              Router.push('/')
               alert(res.data.message)
             }
       
