@@ -1,11 +1,20 @@
 import { Link } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 import { useCartContext } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatPrice';
 
 const CartTotal = () => {
+  const { clearCart } = useCartContext();
+  const router = useRouter();
   const { total_amount } = useCartContext();
+
+  const handleCheckout = () => {
+    alert('Cart checked out. Thank you');
+    clearCart();
+    router.push('/');
+  };
 
   return (
     <Wrapper>
@@ -20,7 +29,9 @@ const CartTotal = () => {
             order total :<span>{formatPrice(total_amount)}</span>
           </h4>
         </article>
-        {/* // checkout here */}
+        <button className='btn' onClick={handleCheckout}>
+          Checkout
+        </button>
       </div>
     </Wrapper>
   );
@@ -51,6 +62,9 @@ const Wrapper = styled.section`
     justify-content: flex-end;
   }
   .btn {
+    background-color: var(--clr-black);
+    color: var(--clr-white);
+    border-radius: var(--radius);
     width: 100%;
     margin-top: 1rem;
     text-align: center;
